@@ -3,8 +3,9 @@ from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from db import stores
-
+from schemas import StoreSchema
 #   blueprint in flask_smorest is  used to divide an API into multiple segments
+
 
 blp = Blueprint("stores", __name__, description="Operations on stores")
 
@@ -38,10 +39,9 @@ class StoreList(MethodView):
 
 
 #   CREATE NEW STORE
-    def post(self):
-        store_data = request.get_json()
-        if "name" not in store_data:
-            abort(400, message="Bad Request. Ensure 'name' is included in the JSON payload.")
+    @blp.arguments(StoreSchema)
+    def post(self, store_data):
+
         for store in stores.values():
             if (store_data["name"] == store["name"]):
                 abort(400, message="Bad Request. Store already exists.")

@@ -3,8 +3,10 @@ from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from db import items,stores
+from schemas import ItemSchema, ItemUpdateSchema
 
 #   blueprint in flask_smorest is  used to divide an API into multiple segments
+
 
 blp = Blueprint("items", __name__, description="Operations on items")
 
@@ -29,12 +31,8 @@ class Item(MethodView):
 
 
 #   UPDATE ITEM BY ID
-    def put(self, item_id):
-        item_data = request.get_json()
-
-        if "price" not in item_data or "name" not in item_data:
-            abort(404, message="Bad request. Ensure 'price' and 'name' are in the JSON payload.")
-
+    @blp.arguments(ItemUpdateSchema)
+    def put(self, item_data, item_id):
         try:
             # mojt vaka
             # items[item_id]["name"] = item_data["name"]
@@ -56,15 +54,8 @@ class ItemList(MethodView):
 
 
 #   CREATE NEW ITEM
-    def post(self):
-        item_data = request.get_json()
-        # ako slucajno ne go pustime store_id vo JSON post togas error hanldaj go vaka:
-        if (
-                "price" not in item_data
-                or "store_id" not in item_data
-                or "name" not in item_data
-        ):
-            abort(404, message="Bad Request. Ensure 'price', 'store_id' and 'name' are included in the JSON payload.")
+    @blp.arguments(ItemSchema)
+    def post(self, item_data):
 
         for item in items.values():
             if (item_data["name"] == item["name"]
