@@ -8,7 +8,7 @@ class ItemModel(db.Model):
     name = db.Column(db.String(80), unique=True, nullable=False)
     price = db.Column(db.Float(precision=2),unique=False, nullable=False)
     #One-to-many relationship (one store may have multiple items)
-    store_id = db.Column(db.Integer, db.ForeignKey("stores.id"), unique=False,nullable=False)
+    store_id = db.Column(db.Integer, db.ForeignKey("stores.id"), unique=False, nullable=False)
     #SQLAlchemy znajt deka stores tabelata e koristena od StoreModel klasata
     #Vekje koga go znaeme id-to na store, moze da definirame vrska so StoreModel klasata i avtomatski da ja popolnime ovaa store promenliva
     #so id = store_id
