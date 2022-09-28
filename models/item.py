@@ -14,4 +14,6 @@ class ItemModel(db.Model):
     #so id = store_id
     store = db.relationship("StoreModel",back_populates="items")
 
+    #go povrzuvame so tags
+    tags = db.relationship("TagModel",back_populates="items",secondary="items_tags")
 
